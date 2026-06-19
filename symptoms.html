@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h4>Select symptoms (click to add)</h4>
+<div class="mb-3">
+  {% for s in vocab %}
+    <button class="btn btn-sm btn-light border m-1 add-symptom" data-symptom="{{ s }}">{{ s }}</button>
+  {% endfor %}
+</div>
+
+<form method="post" action="{{ url_for('predict') }}">
+  <div class="mb-3">
+    <label class="form-label">Symptoms (will be sent)</label>
+    <textarea id="symptoms_text" name="symptoms_text" class="form-control" placeholder="e.g. fever; cough"></textarea>
+  </div>
+
+  <div class="row g-2 mb-3">
+    <div class="col-md-6"><input name="name" class="form-control" placeholder="Name" required></div>
+    <div class="col-md-3"><input name="age" class="form-control" placeholder="Age" type="number" required></div>
+    <div class="col-md-3">
+      <select name="gender" class="form-select">
+        <option value="">Gender</option><option>Male</option><option>Female</option><option>Other</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" type="submit">Predict</button>
+  <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Back</a>
+</form>
+
+<script>
+document.querySelectorAll('.add-symptom').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const s = btn.dataset.symptom;
+    const ta = document.getElementById('symptoms_text');
+    if (!ta.value.includes(s)) {
+      ta.value = ta.value ? ta.value + '; ' + s : s;
+    }
+  });
+});
+</script>
+{% endblock %}

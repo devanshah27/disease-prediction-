@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Nearby Doctors</h2>
+<ul class="list-group">
+  {% for d in doctors %}
+    <li class="list-group-item">
+      <div class="d-flex justify-content-between">
+        <div>
+          <strong>{{ d.name }}</strong><br>
+          {{ d.specialty }} — {{ d.distance }}
+        </div>
+        <div>
+          <a class="btn btn-primary btn-sm" href="tel:{{ d.phone }}">Call</a>
+        </div>
+      </div>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

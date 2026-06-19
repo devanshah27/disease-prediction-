@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h4>Hi {{ user.name }}, here are the results</h4>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">Top Predictions</h5>
+    {% for p in predictions %}
+      <div class="mb-3">
+        <strong>{{ loop.index }}. {{ p.disease }}</strong>
+        <div>Confidence: {{ (p.confidence*100)|round(2) }}%</div>
+        <p>{{ disease_info[p.disease].description }}</p>
+
+        <p>
+          <a class="btn btn-sm btn-outline-primary" href="https://www.1mg.com/search/all?name={{ p.disease | urlencode }}" target="_blank">Order Medicines</a>
+        </p>
+      </div>
+      <hr>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="mb-3">
+  <a class="btn btn-success" href="{{ url_for('doctors') }}">Book Appointment / Nearby Doctors</a>
+
+  {% set life = false %}
+  {% for p in predictions %}
+    {% if disease_info[p.disease].life_threatening == 1 %}
+      {% set life = true %}
+    {% endif %}
+  {% endfor %}
+
+  {% if life %}
+    <button class="btn btn-danger" onclick="alert('This condition may be life-threatening. Call 108 or visit the nearest hospital now.')">Call Emergency</button>
+  {% endif %}
+</div>
+
+<a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Run another check</a>
+{% endblock %}
